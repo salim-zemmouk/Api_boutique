@@ -1,17 +1,21 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'cypress/included:10.0.0' // Utilise l'image Docker officielle avec Cypress
+            args '-u root:root'  // Pour donner des droits d'administrateur (au cas où il y aurait des problèmes de permission)
+        }
+    }
     stages {
         stage('Checkout') {
             steps {
-                // Récupérer le code depuis le dépôt Git
                 checkout scm
             }
         }
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Installer Node.js et les dépendances du projet
-                    sh 'npm ci' // Utilise 'npm ci' pour une installation propre des dépendances
+                    // Installer les dépendances du projet
+                    sh 'npm ci'
                 }
             }
         }
@@ -19,7 +23,7 @@ pipeline {
             steps {
                 script {
                     // Exécuter les tests Cypress
-                    sh 'npx cypress run'  // ou 'npm run cypress' si tu as un script défini dans package.json
+                    sh 'npx cypress run'
                 }
             }
         }
