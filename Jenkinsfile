@@ -6,9 +6,17 @@ pipeline {
         }
     }
     stages {
+        stage('Check Docker') {
+            steps {
+                script {
+                    // Test si Docker est accessible
+                    sh 'docker --version'
+                }
+            }
+        }
         stage('Checkout') {
             steps {
-                checkout scm
+                checkout scm  // Récupère le code source depuis le dépôt Git
             }
         }
         stage('Install Dependencies') {
